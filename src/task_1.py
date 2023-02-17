@@ -6,27 +6,39 @@ cv.startWindowThread()
 cap = cv.VideoCapture("C:/Users/tjago/Documents/AINT515/src/Videos/Video1 for Vision CW.avi")
 
 params = cv.SimpleBlobDetector_Params()
-
 #Threshold
 params.minThreshold = 10;
 params.maxThreshold = 200;
-
 #Filter by area
 params.filterByArea = True
-params.minArea = 300
-
+params.minArea = 500
 #Filter by Circularity
 params.filterByCircularity = True
 params.minCircularity = 0.01
-
 # Filter by Convexity
 params.filterByConvexity = True
 params.minConvexity = 0.87
- 
 # Filter by Inertia
 params.filterByInertia = True
-params.minInertiaRatio = 0.2
+params.minInertiaRatio = 0.3
 
+#Params for outer blob
+params2 = cv.SimpleBlobDetector_Params()
+
+params2.minThreshold = 10
+params2.maxThreshold = 200
+
+params2.filterByArea = True
+params2.minArea = 50
+
+params2.filterByCircularity = True
+params.minCircularity = 0.000000001
+
+params2.filterByConvexity = True
+params2.minConvexity = 0.2
+
+params2.filterByInertia = True
+params2.minInertiaRatio = 0.01
 
 if (cap.isOpened()== False): 
   print("Error opening video stream or file")
@@ -38,41 +50,47 @@ while(cap.isOpened()):
   if ret == True:
     #Blob Detection
     rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-    gray = cv.cvtColor(rgb, cv.COLOR_BGR2GRAY)
+    gray = cv.cvtColor(rgb, cv.COLOR_RGB2GRAY)
 
     kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (11,11))
 
-    gray = cv.dilate(gray, kernel, iterations = 1)
-    gray = cv.erode(gray, kernel, iterations=1)
+    gray = cv.dilate(gray, kernel, iterations = 2)
+    gray = cv.erode(gray, kernel, iterations = 2)
+
+    hsv = cv.cvtColor(rgb, cv.COLOR_RGB2HSV)
+    #Hue
+    lowH = 0
+    highH = 180
+
+    #Saturation
+    lowS = 0
+    highS = 255
+
+    #Value
+    lowV = 0
+    highV = 70
+
+    thresholdIMG = cv.inRange(hsv, (lowH, lowS, lowV), (highH, highS, highV))
+
+    kernel2 = cv.getStructuringElement(cv.MORPH_ELLIPSE,(3,3))
+    cannyThreshold = 55
+    thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 2)
+    thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
+    thresholdIMG = cv.Canny(thresholdIMG, cannyThreshold, cannyThreshold*2)
 
     detector = cv.SimpleBlobDetector_create(params)
+    detector2 = cv.SimpleBlobDetector_create(params2)
     blobs = detector.detect(gray)
+    blobs2 = detector2.detect(thresholdIMG)
 
     inputImgBlobs = cv.drawKeypoints(rgb, blobs, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-
-    #Contours
-    ret, thresh = cv.threshold(gray, 150, 255, cv.THRESH_BINARY)
-    contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, method = cv.CHAIN_APPROX_NONE)
-
-    frameCopy = rgb.copy()
-    cv.drawContours(frameCopy, contours, contourIdx= -1, color = (0,255,0), thickness = 2, lineType = cv.LINE_AA)
-    
-    grayContours = cv.cvtColor(frameCopy, cv.COLOR_BGR2GRAY)
-
-    grayContours = cv.dilate(grayContours, kernel, iterations = 1)
-    grayContours = cv.dilate(grayContours, kernel, iterations = 1)
-    contourBlobs = detector.detect(grayContours)
-
-    inputImgContours = cv.drawKeypoints(frameCopy, contourBlobs, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-
+    inputImgBlobs2 = cv.drawKeypoints(rgb, blobs2, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     # Display the resulting frame
-    cv.imshow('Frame',frame)
-    cv.imshow('RGB', rgb)
     cv.imshow('Gray', gray)
+    cv.imshow('HSV', hsv)
+    cv.imshow('ThresholdIMG', thresholdIMG)
     cv.imshow('Blobs', inputImgBlobs)
-    cv.imshow("Thresh", thresh)
-    cv.imshow("Contours", frameCopy)
-    #cv.imshow("Blob detect with Contours", inputImgContours)
+    cv.imshow('Blobs 2', inputImgBlobs2)
  
     # Press Q on keyboard to  exit
     if cv.waitKey(25) & 0xFF == ord('q'):
