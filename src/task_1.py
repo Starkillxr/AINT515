@@ -3,8 +3,9 @@ import numpy as np
 import os, sys
 
 cv.startWindowThread()
-cap = cv.VideoCapture("C:/Users/tjago/Documents/AINT515/src/Videos/Video1 for Vision CW.avi")
+cap = cv.VideoCapture("D:/Videos/Video1 for Vision CW.avi")
 
+#Params for inner blob
 params = cv.SimpleBlobDetector_Params()
 #Threshold
 params.minThreshold = 10;
@@ -28,17 +29,17 @@ params2 = cv.SimpleBlobDetector_Params()
 params2.minThreshold = 10
 params2.maxThreshold = 200
 
-params2.filterByArea = True
-params2.minArea = 50
+params2.filterByArea =  True
+params2.minArea = 550
 
 params2.filterByCircularity = True
-params.minCircularity = 0.000000001
+params2.minCircularity = 0.000000001
 
 params2.filterByConvexity = True
 params2.minConvexity = 0.2
 
 params2.filterByInertia = True
-params2.minInertiaRatio = 0.01
+params2.minInertiaRatio = 0.1
 
 if (cap.isOpened()== False): 
   print("Error opening video stream or file")
@@ -52,10 +53,10 @@ while(cap.isOpened()):
     rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
     gray = cv.cvtColor(rgb, cv.COLOR_RGB2GRAY)
 
-    kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (11,11))
+    kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (7,7))
 
-    gray = cv.dilate(gray, kernel, iterations = 2)
-    gray = cv.erode(gray, kernel, iterations = 2)
+    gray = cv.dilate(gray, kernel, iterations = 1)
+    gray = cv.erode(gray, kernel, iterations = 1)
 
     hsv = cv.cvtColor(rgb, cv.COLOR_RGB2HSV)
     #Hue
@@ -84,18 +85,17 @@ while(cap.isOpened()):
     blobs2 = detector2.detect(thresholdIMG)
 
     inputImgBlobs = cv.drawKeypoints(rgb, blobs, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-    inputImgBlobs2 = cv.drawKeypoints(rgb, blobs2, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    inputImgBlobs = cv.drawKeypoints(inputImgBlobs, blobs2, np.array([]), (0,255,0), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     # Display the resulting frame
+    cv.imshow('RGB', rgb)
     cv.imshow('Gray', gray)
     cv.imshow('HSV', hsv)
     cv.imshow('ThresholdIMG', thresholdIMG)
-    cv.imshow('Blobs', inputImgBlobs)
-    cv.imshow('Blobs 2', inputImgBlobs2)
+    cv.imshow('Inner & Outer Blobs', inputImgBlobs)
  
     # Press Q on keyboard to  exit
-    if cv.waitKey(25) & 0xFF == ord('q'):
+    if cv.waitKey(50) & 0xFF == ord('q'):
       break
- 
   # Break the loop
   else: 
     break
