@@ -103,11 +103,13 @@ for i in range(1,3):
 
       inputImgBlobs = cv.drawKeypoints(rgb, blobs, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
       inputImgBlobs = cv.drawKeypoints(inputImgBlobs, blobs2, np.array([]), (0,255,0), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+      inputImgBlobs2 = cv.drawKeypoints(rgb, blobs2, np.array([]), (0,255,0), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
       # Display the resulting frame
       cv.imshow('RGB', rgb)
       cv.imshow('Gray', gray)
       cv.imshow('HSV', hsv)
       cv.imshow('ThresholdIMG', thresholdIMG)
+      cv.imshow('Outer Blobs', inputImgBlobs2)
       cv.imshow('Inner & Outer Blobs', inputImgBlobs)
 
       # Press Q on keyboard to  exit
