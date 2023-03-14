@@ -69,11 +69,11 @@ for i in range(1,3):
       #Blob Detection
       rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
       gray = cv.cvtColor(rgb, cv.COLOR_RGB2GRAY)
+      gray = cv.GaussianBlur(gray, (11,11), 0)
+      gray = cv.Canny(gray, 30, 150, 3)
+      gray = cv.dilate(gray, (1,1), iterations = 1)
 
-      kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (7,7))
-
-      gray = cv.dilate(gray, kernel, iterations = 1)
-      gray = cv.erode(gray, kernel, iterations = 1)
+      kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (3,3))
 
       hsv = cv.cvtColor(rgb, cv.COLOR_RGB2HSV)
       #Hue
@@ -92,9 +92,9 @@ for i in range(1,3):
 
       kernel2 = cv.getStructuringElement(cv.MORPH_ELLIPSE,(3,3))
       cannyThreshold = 55
-      thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 2)
-      thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
+      thresholdIMG = cv.GaussianBlur(thresholdIMG, (11,11), 0)
       thresholdIMG = cv.Canny(thresholdIMG, cannyThreshold, cannyThreshold*2)
+      thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 1)
 
       detector = cv.SimpleBlobDetector_create(params)
       detector2 = cv.SimpleBlobDetector_create(params2)
@@ -103,7 +103,7 @@ for i in range(1,3):
 
       inputImgBlobs = cv.drawKeypoints(rgb, blobs, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
       inputImgBlobs = cv.drawKeypoints(inputImgBlobs, blobs2, np.array([]), (0,255,0), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-      inputImgBlobs2 = cv.drawKeypoints(rgb, blobs2, np.array([]), (0,255,0), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+      inputImgBlobs2 = cv.drawKeypoints(thresholdIMG, blobs2, np.array([]), (0,255,0), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
       # Display the resulting frame
       cv.imshow('RGB', rgb)
       cv.imshow('Gray', gray)
