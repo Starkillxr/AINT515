@@ -74,9 +74,9 @@ while(cap.isOpened()):
 
     kernel2 = cv.getStructuringElement(cv.MORPH_ELLIPSE,(3,3))
     cannyThreshold = 55
+    thresholdIMG = cv.Canny(thresholdIMG, cannyThreshold, cannyThreshold*2)
     thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 2)
     thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
-    thresholdIMG = cv.Canny(thresholdIMG, cannyThreshold, cannyThreshold*2)
 
     detector = cv.SimpleBlobDetector_create(params)
     detector2 = cv.SimpleBlobDetector_create(params2)
