@@ -5,7 +5,6 @@ import os, sys
 <<<<<<< HEAD
 cv.startWindowThread()
 <<<<<<< HEAD
-<<<<<<< HEAD
 cap = cv.VideoCapture("E:/Videos/Video1 for Vision CW.avi")
 =======
 >>>>>>> f610af92287b1de216fdd086d5006d18129973ab
@@ -27,17 +26,14 @@ else:
 =======
 cap = cv.VideoCapture("D:/Videos/Video1 for Vision CW.avi")
 >>>>>>> parent of b92bcd4... Update task_1.py
-=======
-cap = cv.VideoCapture("C:/Users/tjago/Documents/AINT515/src/Videos/Video1 for Vision CW.avi")
->>>>>>> parent of c7c1726... Update task_1.py
 
 cv.startWindowThread()
 
 #Params for inner blob
 params = cv.SimpleBlobDetector_Params()
 #Threshold
-params.minThreshold = 10;
-params.maxThreshold = 200;
+params.minThreshold = 0
+params.maxThreshold = 2000
 #Filter by area
 params.filterByArea = True
 params.minArea = 500
@@ -49,19 +45,19 @@ params.filterByConvexity = True
 params.minConvexity = 0.87
 # Filter by Inertia
 params.filterByInertia = True
-params.minInertiaRatio = 0.3
+params.minInertiaRatio = 0.1
 
 #Params for outer blob
 params2 = cv.SimpleBlobDetector_Params()
 
-params2.minThreshold = 10
-params2.maxThreshold = 200
+params2.minThreshold = 0
+params2.maxThreshold = 2000
 
 <<<<<<< HEAD
 params2.filterByArea = True
-params2.minArea = 50
+params2.minArea = 1000
 
-params2.filterByCircularity = True
+params2.filterByCircularity = False
 params.minCircularity = 0.000000001
 =======
 params2.filterByArea =  True
@@ -91,9 +87,12 @@ while(cap.isOpened()):
     gray = cv.cvtColor(rgb, cv.COLOR_RGB2GRAY)
 
     kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (11,11))
+    cannyThreshold = 55
+  
+    gray = cv.dilate(gray, kernel, iterations = 1)
+    gray = cv.erode(gray, kernel, iterations = 1)
+    #gray = cv.Canny(gray, cannyThreshold, cannyThreshold*2)
 
-    gray = cv.dilate(gray, kernel, iterations = 2)
-    gray = cv.erode(gray, kernel, iterations = 2)
 
     hsv = cv.cvtColor(rgb, cv.COLOR_RGB2HSV)
     #Hue
@@ -101,13 +100,12 @@ while(cap.isOpened()):
     highH = 180
 
     #Saturation
-    lowS = 0
+    lowS = 63.3
     highS = 255
 
     #Value
-    lowV = 0
+    lowV = 11.8
     highV = 70
-<<<<<<< HEAD
 =======
 for i in range(1,3):
   # Read until video is completed
@@ -185,16 +183,6 @@ for i in range(1,3):
     contours, hierarchy = cv.findContours(thresholdIMG, cv.RETR_EXTERNAL,
                                           cv.CHAIN_APPROX_NONE)
     cv.drawContours(thresholdIMG, contours, -1, (0,255,0),4)
-=======
-
-    thresholdIMG = cv.inRange(hsv, (lowH, lowS, lowV), (highH, highS, highV))
-
-    kernel2 = cv.getStructuringElement(cv.MORPH_ELLIPSE,(3,3))
-    cannyThreshold = 55
-    thresholdIMG = cv.Canny(thresholdIMG, cannyThreshold, cannyThreshold*2)
-    thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 2)
-    thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
->>>>>>> parent of c7c1726... Update task_1.py
 
     detector = cv.SimpleBlobDetector_create(params)
     detector2 = cv.SimpleBlobDetector_create(params2)
@@ -203,12 +191,15 @@ for i in range(1,3):
 
 >>>>>>> parent of b92bcd4... Update task_1.py
     inputImgBlobs = cv.drawKeypoints(rgb, blobs, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-    inputImgBlobs2 = cv.drawKeypoints(rgb, blobs2, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    inputImgBlobs2 = cv.drawKeypoints(inputImgBlobs, blobs2, np.array([]), (0,255,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     # Display the resulting frame
-    cv.imshow('Gray', gray)
-    cv.imshow('HSV', hsv)
+    #cv.imshow('Gray', gray)
+    #cv.imshow('HSV', hsv)
     cv.imshow('ThresholdIMG', thresholdIMG)
     cv.imshow('Blobs', inputImgBlobs)
+    text = 'Number of Blobs:'
+    org = (50,150)
+    cv.putText(inputImgBlobs2, text, org, fontFace= cv.FONT_HERSHEY_COMPLEX, fontScale=2, color=(0,255,255))
     cv.imshow('Blobs 2', inputImgBlobs2)
  
     # Press Q on keyboard to  exit
