@@ -6,6 +6,7 @@ import os, sys
 cv.startWindowThread()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 cap = cv.VideoCapture("E:/Videos/Video1 for Vision CW.avi")
 =======
 >>>>>>> f610af92287b1de216fdd086d5006d18129973ab
@@ -30,6 +31,9 @@ cap = cv.VideoCapture("D:/Videos/Video1 for Vision CW.avi")
 =======
 cap = cv.VideoCapture("C:/Users/tjago/Documents/AINT515/src/Videos/Video1 for Vision CW.avi")
 >>>>>>> parent of c7c1726... Update task_1.py
+=======
+cap = cv.VideoCapture("D:/Videos/Video1 for Vision CW.avi")
+>>>>>>> parent of b92bcd4... Update task_1.py
 
 cv.startWindowThread()
 
@@ -89,6 +93,16 @@ while(cap.isOpened()):
     #Blob Detection
     rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
     gray = cv.cvtColor(rgb, cv.COLOR_RGB2GRAY)
+<<<<<<< HEAD
+=======
+
+    kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (11,11))
+    cannyThreshold = 55
+  
+    gray = cv.dilate(gray, kernel, iterations = 1)
+    gray = cv.erode(gray, kernel, iterations = 1)
+    #gray = cv.Canny(gray, cannyThreshold, cannyThreshold*2)
+>>>>>>> parent of b92bcd4... Update task_1.py
 
     kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (11,11))
 
@@ -157,6 +171,7 @@ for i in range(1,3):
     thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 1)
     #thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
 <<<<<<< HEAD
+<<<<<<< HEAD
     #contours, hierarchy = cv.findContours(thresholdIMG, cv.RETR_EXTERNAL,
     #                                      cv.CHAIN_APPROX_NONE)
     #cv.drawContours(thresholdIMG, contours, -1, (0,255,0),4)
@@ -195,6 +210,11 @@ for i in range(1,3):
     thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 2)
     thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
 >>>>>>> parent of c7c1726... Update task_1.py
+=======
+    contours, hierarchy = cv.findContours(thresholdIMG, cv.RETR_EXTERNAL,
+                                          cv.CHAIN_APPROX_NONE)
+    cv.drawContours(thresholdIMG, contours, -1, (0,255,0),4)
+>>>>>>> parent of b92bcd4... Update task_1.py
 
     detector = cv.SimpleBlobDetector_create(params)
     detector2 = cv.SimpleBlobDetector_create(params2)
