@@ -3,7 +3,7 @@ import numpy as np
 import os, sys
 
 cv.startWindowThread()
-cap = cv.VideoCapture("D:/Videos/Video1 for Vision CW.avi")
+cap = cv.VideoCapture("E:/Videos/Video1 for Vision CW.avi")
 
 params = cv.SimpleBlobDetector_Params()
 #Threshold
@@ -48,11 +48,11 @@ while(cap.isOpened()):
   # Capture frame-by-frame
   ret, frame = cap.read()
   if ret == True:
+    kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (11,11))
     #Blob Detection
     rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
     gray = cv.cvtColor(rgb, cv.COLOR_RGB2GRAY)
-
-    kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (11,11))
+  
     cannyThreshold = 55
   
     gray = cv.dilate(gray, kernel, iterations = 1)
@@ -60,7 +60,7 @@ while(cap.isOpened()):
     #gray = cv.Canny(gray, cannyThreshold, cannyThreshold*2)
 
 
-    hsv = cv.cvtColor(rgb, cv.COLOR_RGB2HSV)
+    hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
     #Hue
     lowH = 0
     highH = 180
@@ -78,14 +78,15 @@ while(cap.isOpened()):
     
     
     kernel2 = cv.getStructuringElement(cv.MORPH_ELLIPSE,(3,3))
-    cannyThreshold = 60
     thresholdIMG = cv.GaussianBlur(thresholdIMG, (3,3),1)
-    thresholdIMG = cv.Canny(thresholdIMG, 60, 300)
+    thresholdIMG = cv.Canny(thresholdIMG, 700, 800)
+    cv.imshow("Canny Before Dilate", thresholdIMG)
     thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 1)
+    #cv.imshow("Canny After Dilate", thresholdIMG)
     #thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
-    contours, hierarchy = cv.findContours(thresholdIMG, cv.RETR_EXTERNAL,
-                                          cv.CHAIN_APPROX_NONE)
-    cv.drawContours(thresholdIMG, contours, -1, (0,255,0),4)
+    #contours, hierarchy = cv.findContours(thresholdIMG, cv.RETR_EXTERNAL,
+    #                                      cv.CHAIN_APPROX_NONE)
+    #cv.drawContours(thresholdIMG, contours, -1, (0,255,0),4)
 
     detector = cv.SimpleBlobDetector_create(params)
     detector2 = cv.SimpleBlobDetector_create(params2)
