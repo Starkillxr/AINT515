@@ -1,14 +1,6 @@
 import cv2 as cv
 import numpy as np
 import os, sys
-
-<<<<<<< HEAD
-cv.startWindowThread()
-<<<<<<< HEAD
-cap = cv.VideoCapture("E:/Videos/Video1 for Vision CW.avi")
-=======
->>>>>>> f610af92287b1de216fdd086d5006d18129973ab
-
 #Variables to run the program
 #
 #Which video? 1 2 or 3
@@ -23,9 +15,6 @@ elif(x == 3):
     cap = cv.VideoCapture("D:/Videos/Video3 for Vision CW.avi")
 else:
   print("Select Value 1, 2 or 3 for a video")
-=======
-cap = cv.VideoCapture("D:/Videos/Video1 for Vision CW.avi")
->>>>>>> parent of b92bcd4... Update task_1.py
 
 cv.startWindowThread()
 
@@ -53,49 +42,17 @@ params2 = cv.SimpleBlobDetector_Params()
 params2.minThreshold = 0
 params2.maxThreshold = 2000
 
-<<<<<<< HEAD
-params2.filterByArea = True
-params2.minArea = 1000
-
-params2.filterByCircularity = False
-params.minCircularity = 0.000000001
-=======
 params2.filterByArea =  True
 params2.minArea = 550
 
 params2.filterByCircularity = True
 params2.minCircularity = 0.000000001
->>>>>>> f610af92287b1de216fdd086d5006d18129973ab
 
 params2.filterByConvexity = True
 params2.minConvexity = 0.2
 
 params2.filterByInertia = True
 params2.minInertiaRatio = 0.1
-
-@@ -2,8 +2,23 @@ import cv2 as cv
-import numpy as np
-import os, sys
-
-
-#Variables to run the program
-#
-#Which video? 1 2 or 3
-x = 1
-
-#Selecting the video
-if(x == 1):
-  cap = cv.VideoCapture("D:/Videos/Video1 for Vision CW.avi")
-elif(x == 2):
-  cap = cv.VideoCapture("D:/Videos/Video2 for Vision CW.avi")
-elif(x == 3):
-    cap = cv.VideoCapture("D:/Videos/Video3 for Vision CW.avi")
-else:
-  print("Select Value 1, 2 or 3 for a video")
-
-cv.startWindowThread()
-cap = cv.VideoCapture("D:/Videos/Video1 for Vision CW.avi")
-
 while(cap.isOpened()):
   # Capture frame-by-frame
   ret, frame = cap.read()
@@ -126,9 +83,10 @@ while(cap.isOpened()):
 
     kernel2 = cv.getStructuringElement(cv.MORPH_ELLIPSE,(3,3))
     cannyThreshold = 55
-    thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 2)
-    thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
-    thresholdIMG = cv.Canny(thresholdIMG, cannyThreshold, cannyThreshold*2)
+    #thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 1)
+    #thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
+    thresholdIMG = cv.Canny(thresholdIMG, 100, 600)
+    thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations=1)
 
     detector = cv.SimpleBlobDetector_create(params)
     detector2 = cv.SimpleBlobDetector_create(params2)
