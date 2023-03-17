@@ -4,6 +4,7 @@ import os, sys
 
 <<<<<<< HEAD
 cv.startWindowThread()
+<<<<<<< HEAD
 cap = cv.VideoCapture("E:/Videos/Video1 for Vision CW.avi")
 =======
 >>>>>>> f610af92287b1de216fdd086d5006d18129973ab
@@ -22,6 +23,9 @@ elif(x == 3):
     cap = cv.VideoCapture("D:/Videos/Video3 for Vision CW.avi")
 else:
   print("Select Value 1, 2 or 3 for a video")
+=======
+cap = cv.VideoCapture("D:/Videos/Video1 for Vision CW.avi")
+>>>>>>> parent of b92bcd4... Update task_1.py
 
 cv.startWindowThread()
 
@@ -78,11 +82,11 @@ while(cap.isOpened()):
   # Capture frame-by-frame
   ret, frame = cap.read()
   if ret == True:
-    kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (11,11))
     #Blob Detection
     rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
     gray = cv.cvtColor(rgb, cv.COLOR_RGB2GRAY)
-  
+
+    kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (11,11))
     cannyThreshold = 55
   
     gray = cv.dilate(gray, kernel, iterations = 1)
@@ -90,7 +94,7 @@ while(cap.isOpened()):
     #gray = cv.Canny(gray, cannyThreshold, cannyThreshold*2)
 
 
-    hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+    hsv = cv.cvtColor(rgb, cv.COLOR_RGB2HSV)
     #Hue
     lowH = 0
     highH = 180
@@ -145,12 +149,12 @@ for i in range(1,3):
     
     
     kernel2 = cv.getStructuringElement(cv.MORPH_ELLIPSE,(3,3))
+    cannyThreshold = 60
     thresholdIMG = cv.GaussianBlur(thresholdIMG, (3,3),1)
-    thresholdIMG = cv.Canny(thresholdIMG, 700, 800)
-    cv.imshow("Canny Before Dilate", thresholdIMG)
+    thresholdIMG = cv.Canny(thresholdIMG, 60, 300)
     thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 1)
-    #cv.imshow("Canny After Dilate", thresholdIMG)
     #thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
+<<<<<<< HEAD
     #contours, hierarchy = cv.findContours(thresholdIMG, cv.RETR_EXTERNAL,
     #                                      cv.CHAIN_APPROX_NONE)
     #cv.drawContours(thresholdIMG, contours, -1, (0,255,0),4)
@@ -175,6 +179,17 @@ for i in range(1,3):
       cv.imshow('Inner & Outer Blobs', inputImgBlobs)
 
 <<<<<<< HEAD
+=======
+    contours, hierarchy = cv.findContours(thresholdIMG, cv.RETR_EXTERNAL,
+                                          cv.CHAIN_APPROX_NONE)
+    cv.drawContours(thresholdIMG, contours, -1, (0,255,0),4)
+
+    detector = cv.SimpleBlobDetector_create(params)
+    detector2 = cv.SimpleBlobDetector_create(params2)
+    blobs = detector.detect(gray)
+    blobs2 = detector2.detect(thresholdIMG)
+
+>>>>>>> parent of b92bcd4... Update task_1.py
     inputImgBlobs = cv.drawKeypoints(rgb, blobs, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     inputImgBlobs2 = cv.drawKeypoints(inputImgBlobs, blobs2, np.array([]), (0,255,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     # Display the resulting frame
