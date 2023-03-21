@@ -43,7 +43,7 @@ params2.minThreshold = 0
 params2.maxThreshold = 2000
 
 params2.filterByArea =  True
-params2.minArea = 550
+params2.minArea = 800
 
 params2.filterByCircularity = True
 params2.minCircularity = 0.000000001
@@ -52,7 +52,7 @@ params2.filterByConvexity = True
 params2.minConvexity = 0.2
 
 params2.filterByInertia = True
-params2.minInertiaRatio = 0.1
+params2.minInertiaRatio = 0.7
 while(cap.isOpened()):
   # Capture frame-by-frame
   ret, frame = cap.read()
@@ -60,6 +60,7 @@ while(cap.isOpened()):
     #Blob Detection
     rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
     gray = cv.cvtColor(rgb, cv.COLOR_RGB2GRAY)
+    font = cv.FONT_HERSHEY_SIMPLEX
 
     kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (7,7))
 
@@ -83,10 +84,11 @@ while(cap.isOpened()):
 
     kernel2 = cv.getStructuringElement(cv.MORPH_ELLIPSE,(3,3))
     cannyThreshold = 55
+    thresholdIMG = cv.GaussianBlur(thresholdIMG, (11,11), 1)
     #thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 1)
     #thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
-    thresholdIMG = cv.Canny(thresholdIMG, 100, 600)
-    thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations=1)
+    thresholdIMG = cv.Canny(thresholdIMG, 100, 600,3)
+    thresholdIMG = cv.dilate(thresholdIMG, (1,1), iterations=0)
 
     detector = cv.SimpleBlobDetector_create(params)
     detector2 = cv.SimpleBlobDetector_create(params2)
@@ -95,13 +97,20 @@ while(cap.isOpened()):
 
     inputImgBlobs = cv.drawKeypoints(rgb, blobs, np.array([]), (0,0,255), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     inputImgBlobs = cv.drawKeypoints(inputImgBlobs, blobs2, np.array([]), (0,255,0), cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    
+    nblobs = len(blobs2)
+    text = 'Number of blobs: '
+    text2 = text + str(nblobs)
+    cv.putText(inputImgBlobs, text2, (50,150), font, 1, (255,255,255), 2, cv.LINE_4)
+    
     # Display the resulting frame
     cv.imshow('RGB', rgb)
     cv.imshow('Gray', gray)
     cv.imshow('HSV', hsv)
     cv.imshow('ThresholdIMG', thresholdIMG)
     cv.imshow('Inner & Outer Blobs', inputImgBlobs)
-
+    
+    #print(len(blobs2))
     # Press Q on keyboard to  exit
     if cv.waitKey(50) & 0xFF == ord('q'):
       break
