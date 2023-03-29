@@ -62,7 +62,7 @@ while(cap.isOpened()):
     gray = cv.cvtColor(rgb, cv.COLOR_RGB2GRAY)
     font = cv.FONT_HERSHEY_SIMPLEX
 
-    kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (7,7))
+    kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (13,13))
 
     gray = cv.dilate(gray, kernel, iterations = 1)
     gray = cv.erode(gray, kernel, iterations = 1)
@@ -88,7 +88,7 @@ while(cap.isOpened()):
     #thresholdIMG = cv.dilate(thresholdIMG, kernel2, iterations = 1)
     #thresholdIMG = cv.erode(thresholdIMG, kernel2, iterations = 1)
     thresholdIMG = cv.Canny(thresholdIMG, 100, 600,3)
-    thresholdIMG = cv.dilate(thresholdIMG, (1,1), iterations=0)
+    thresholdIMG = cv.dilate(thresholdIMG, (5,5), iterations=1)
 
     detector = cv.SimpleBlobDetector_create(params)
     detector2 = cv.SimpleBlobDetector_create(params2)
