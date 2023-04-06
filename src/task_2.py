@@ -26,12 +26,12 @@ train_transforms = transforms.Compose([
                             transforms.RandomRotation(45),
                             transforms.RandomHorizontalFlip(25),
                             transforms.RandomVerticalFlip(25),
-                                      ])
+                                    ])
 
 test_transforms = transforms.Compose([
-                           transforms.ToTensor(),
-                           transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-                                     ])
+                        transforms.ToTensor(),
+                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+                                    ])
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
