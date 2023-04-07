@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 PATH ='./cifarmodel1.pth'
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+print(device)
 
 def imshow(img):
     img = img / 2 + 0.5     # unnormalize
@@ -33,8 +35,6 @@ test_transforms = transforms.Compose([
                         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                                     ])
 
-device = torch.device('cuda')
-
 #Creating the Datasets
 trainset = datasets.CIFAR10(root='./data', train=True,
                                         download=True, transform=train_transforms)
@@ -47,8 +47,10 @@ batch_size = 1000
 trainloader = data.DataLoader(trainset, batch_size=batch_size,
                                         shuffle=True, pin_memory=True)
 
+
 testloader = data.DataLoader(testset, batch_size=batch_size,
                                         shuffle=False, pin_memory=True)
+
 
 classes = ('plane', 'car', 'bird', 'cat',
 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
@@ -89,6 +91,7 @@ print('Finished Training')
 torch.save(model.state_dict(), PATH)
 
 dataiter = iter(testloader)
+dataiter.to(device)
 images, labels = next(dataiter)
 
 print('GroundTruth: ', ' '.join(f'{classes[labels[j]]:5s}' for j in range(4)))
