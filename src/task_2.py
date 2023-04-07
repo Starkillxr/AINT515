@@ -90,7 +90,6 @@ torch.save(model.state_dict(), PATH)
 dataiter = iter(testloader)
 images, labels = next(dataiter)
 
-imshow(torchvision.utils.make_grid(images))
 print('GroundTruth: ', ' '.join(f'{classes[labels[j]]:5s}' for j in range(4)))
 
 correct = 0
