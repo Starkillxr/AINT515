@@ -118,5 +118,4 @@ while(cap.isOpened()):
   else: 
     break 
 # When everything done, release the video capture object
-cap.release()
- 
+cap.release() 

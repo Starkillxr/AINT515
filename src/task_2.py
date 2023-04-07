@@ -39,19 +39,19 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 trainset = datasets.CIFAR10(root='./data', train=True,
                                         download=True, transform=train_transforms)
 testset = datasets.CIFAR10(root='./data', train=False,
-                                       download=True, transform=test_transforms)
+                                    download=True, transform=test_transforms)
 
 #Data Loaders
-batch_size = 100
+batch_size = 200
 
 trainloader = data.DataLoader(trainset, batch_size=batch_size,
-                                          shuffle=True, pin_memory=True)
+                                        shuffle=True, pin_memory=True)
 
 testloader = data.DataLoader(testset, batch_size=batch_size,
-                                         shuffle=False, pin_memory=True)
+                                        shuffle=False, pin_memory=True)
 
 classes = ('plane', 'car', 'bird', 'cat',
-           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 
 model = Model1()
@@ -63,7 +63,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 torch.backends.cudnn.benchmark = True
 
-for epoch in range(1):  # loop over the dataset multiple times
+for epoch in range(100):  # loop over the dataset multiple times
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
         # get the inputs; data is a list of [inputs, labels]
