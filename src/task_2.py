@@ -42,7 +42,7 @@ testset = datasets.CIFAR10(root='./data', train=False,
                                     download=True, transform=test_transforms)
 
 #Data Loaders
-batch_size = 200
+batch_size = 1000
 
 trainloader = data.DataLoader(trainset, batch_size=batch_size,
                                         shuffle=True, pin_memory=True)
