@@ -33,7 +33,7 @@ test_transforms = transforms.Compose([
                         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
                                     ])
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda')
 
 #Creating the Datasets
 trainset = datasets.CIFAR10(root='./data', train=True,
