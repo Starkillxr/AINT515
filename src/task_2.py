@@ -73,8 +73,9 @@ for epoch in range(100):  # loop over the dataset multiple times
             param.grid = None
 
         # forward + backward + optimize
-        outputs = model(inputs)
+        outputs = model(inputs).to(device)
         loss = criterion(outputs, labels)
+        loss.to(device)
         loss.backward()
         optimizer.step()
 
@@ -97,9 +98,9 @@ total = 0
 
 with torch.no_grad():
     for data in testloader:
-        images, labels = data
+        images, labels = data[0].to(device), data[1].to(device)
         # calculate outputs by running images through the network
-        outputs = model(images)
+        outputs = model(images).to(device)
         # the class with the highest energy is what we choose as prediction
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
@@ -113,8 +114,8 @@ total_pred = {classname: 0 for classname in classes}
 
 with torch.no_grad():
     for data in testloader:
-        images, labels = data
-        outputs = model(images)
+        images, labels = data[0].to(device), data[1].to(device)
+        outputs = model(images).to(device)
         _, predictions = torch.max(outputs, 1)
         # collect the correct predictions for each class
         for label, prediction in zip(labels, predictions):
