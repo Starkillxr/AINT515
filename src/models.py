@@ -8,37 +8,37 @@ class Model1(nn.Module):
   def __init__(self):
     super().__init__()
     #Convolutions
-    self.conv1 = nn.Conv2d(3,6,3,bias = False)
-    self.conv2 = nn.Conv2d(6,12,3, bias = False)
-    self.conv3 = nn.Conv2d(12,16,3, bias = False)
-    self.conv4 = nn.Conv2d(16,20,3, bias = False)
+    self.conv1 = nn.Conv2d(3,30,3,bias = False)
+    self.conv2 = nn.Conv2d(30,300,3, bias = False)
+    self.conv3 = nn.Conv2d(300,600,3, bias = False)
+    self.conv4 = nn.Conv2d(600,1800,3, bias = False)
 
     #MLP Layer
-    self.mlp = ops.MLP(2048, [512 for i in range(4)])
+    self.mlp = ops.MLP(1800, [900 for i in range(9)])
 
     #dropout
     self.dropout = nn.Dropout(0.5)
+    
+    self.pool = nn.MaxPool2d(3)
+    self.pool1 = nn.MaxPool2d(3)
+    self.pool2 = nn.MaxPool2d(3)
+    self.avg = nn.AvgPool2d(5)
 
-    #Recurrent Layers
-    self.gru = nn.GRUCell(11520, 2048)
 
     #Linear Layers
-    self.linear1 = nn.Linear(512, 256)
-    self.linear2 = nn.Linear(256, 128)
-    self.linear3 = nn.Linear(128,10)
+    self.linear1 = nn.Linear(900, 300)
+    self.linear2 = nn.Linear(300, 100)
+    self.linear3 = nn.Linear(100,10)
 
   def forward(self, x):
     x = F.relu(self.conv1(x))
-    x = F.relu(self.conv2(x))
+    x = self.pool1(F.relu(self.conv2(x)))
     x = self.dropout(x)
     
     x = F.relu(self.conv3(x))
-    x = F.relu(self.conv4(x))
+    x = self.avg(F.relu(self.conv4(x)))
     #x = self.dropout(x)
     x = torch.flatten(x,1)
-    x = self.gru(x)
-    x = F.relu(x)
-    
     x = self.mlp(x)
     x = F.relu(self.linear1(x))
     x = F.relu(self.linear2(x))

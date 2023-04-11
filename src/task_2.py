@@ -58,11 +58,13 @@ classes = ('plane', 'car', 'bird', 'cat',
 
 model = Model1()
 
-model.to(device)
-model.load_state_dict(torch.load(PATH))
+try:
+    model.load_state_dict(torch.load(PATH))
+except:
+    print("Unable to load state dictionary from PATH")
 criterion = nn.CrossEntropyLoss().cuda(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-
+model.to(device)
 torch.backends.cudnn.benchmark = True
 
 for epoch in range(100):  # loop over the dataset multiple times
@@ -83,7 +85,7 @@ for epoch in range(100):  # loop over the dataset multiple times
 
         # print statistics
         running_loss += loss.item()
-        if i % 200 == 199:    # print every 2000 mini-batches
+        if i % 2 == 1:    # print every 2000 mini-batches
             print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 200:.3f}')
             running_loss = 0.0
 
