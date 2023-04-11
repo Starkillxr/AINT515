@@ -8,10 +8,8 @@ class Model1(nn.Module):
   def __init__(self):
     super().__init__()
     #Convolutions
-    self.conv1 = nn.Conv2d(3,30,3,bias = False)
-    self.conv2 = nn.Conv2d(30,300,3, bias = False)
-    self.conv3 = nn.Conv2d(300,600,3, bias = False)
-    self.conv4 = nn.Conv2d(600,1800,3, bias = False)
+    self.conv1 = nn.Conv2d(3,6,5)
+    self.conv2 = nn.Conv2d(6,16,5)
 
     #MLP Layer
     self.mlp = ops.MLP(1800, [900 for i in range(9)])
@@ -19,32 +17,35 @@ class Model1(nn.Module):
     #dropout
     self.dropout = nn.Dropout(0.5)
     
-    self.pool = nn.MaxPool2d(3)
+    self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
     self.pool1 = nn.MaxPool2d(3)
-    self.pool2 = nn.MaxPool2d(3)
-    self.avg = nn.AvgPool2d(5)
+    self.pool3 = nn.MaxPool2d(5)
 
 
     #Linear Layers
-    self.linear1 = nn.Linear(900, 300)
-    self.linear2 = nn.Linear(300, 100)
-    self.linear3 = nn.Linear(100,10)
+    self.linear1 = nn.Linear(16*5*5, 120)
+    self.linear2 = nn.Linear(120, 84)
+    self.linear3 = nn.Linear(84,10)
 
   def forward(self, x):
-    x = F.relu(self.conv1(x))
-    x = self.pool1(F.relu(self.conv2(x)))
-    x = self.dropout(x)
+    #Convolutions
+    x = x
     
-    x = F.relu(self.conv3(x))
-    x = self.avg(F.relu(self.conv4(x)))
-    #x = self.dropout(x)
-    x = torch.flatten(x,1)
-    x = self.mlp(x)
-    x = F.relu(self.linear1(x))
-    x = F.relu(self.linear2(x))
+    x = self.conv1(x)
+    x = F.relu(x)
+    x = self.pool(x)
+
+    x = self.conv2(x)
+    x = F.relu(x)
+    x = self.pool(x)
+    
+    x = x.reshape(-1, 16*5*5)
+    x = self.linear1(x)
+    x = F.relu(x)
+    
+    x = self.linear2(x)
+    x = F.relu(x)
+    
     x = self.linear3(x)
-
-
-
 
     return x
