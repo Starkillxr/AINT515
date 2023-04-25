@@ -22,7 +22,7 @@ cv.startWindowThread()
 params = cv.SimpleBlobDetector_Params()
 #Threshold
 params.minThreshold = 0
-params.maxThreshold = 2000
+params.maxThreshold = 100
 #Filter by area
 params.filterByArea = True
 params.minArea = 500
@@ -40,7 +40,7 @@ params.minInertiaRatio = 0.1
 params2 = cv.SimpleBlobDetector_Params()
 
 params2.minThreshold = 0
-params2.maxThreshold = 2000
+params2.maxThreshold = 100
 
 params2.filterByArea =  True
 params2.minArea = 800
